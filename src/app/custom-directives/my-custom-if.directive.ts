@@ -1,18 +1,22 @@
-import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Directive } from '@angular/core';
+import { Input, TemplateRef, ViewContainerRef } from '@angular/core';
 
 @Directive({
-  selector: '[appCustomDirectiveIf]',
+  selector: '[myCustomIf]',
 })
 export class MyCustomIfDirective {
-  @Input()
-  set appCustomDirectiveIf(show: any) {
-    show
-      ? this.container.createEmbeddedView(this.templateRef)
-      : this.container.clear();
-  }
-
   constructor(
-    private templateRef: TemplateRef<any>,
+    private template: TemplateRef<any>,
     private container: ViewContainerRef
   ) {}
+
+  @Input() set myCustomIf(shouldAddToDOM: boolean) {
+    if (shouldAddToDOM) {
+      // If the value is true, add template to the DOM
+      this.container.createEmbeddedView(this.template);
+    } else {
+      // Otherwise delete template from the DOM
+      this.container.clear();
+    }
+  }
 }
